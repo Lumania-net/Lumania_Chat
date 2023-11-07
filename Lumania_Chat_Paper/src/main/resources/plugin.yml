@@ -1,0 +1,12 @@
+main: net.lumania.chat.LumaniaChatPlugin
+name: LumaniaChat
+version: 1.0
+author: Marioo
+description: Chat-System Plugin for Lumania Network
+commands:
+  clearchat:
+  msg:
+  r:
+  mutechat:
+  savelog:
+  spy:

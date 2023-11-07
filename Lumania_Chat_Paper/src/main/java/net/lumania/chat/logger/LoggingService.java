@@ -25,7 +25,7 @@ public class LoggingService {
     }
 
     public void saveLog() throws IOException {
-        File file = new File("/logs/" + this.getCurrentDate() + "-logs.txt");
+        File file = new File(this.chatPlugin.getDataFolder() + "/logs/", this.getCurrentDate() + "-logs.txt");
 
         if(!file.exists())
             file.createNewFile();

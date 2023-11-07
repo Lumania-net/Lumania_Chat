@@ -2,6 +2,7 @@ package net.lumania.chat.commands;
 
 import net.lumania.chat.LumaniaChatPlugin;
 import net.lumania.chat.logger.LoggingType;
+import net.lumania.chat.utils.PermissionHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -22,14 +23,14 @@ public class ClearChatCommand implements CommandExecutor {
         if(!(sender instanceof Player player))
             return false;
 
-        if(!player.hasPermission("lumania.chat.clear")) {
-            player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Du hast nicht genügend Rechte§8.");
+        if(!player.hasPermission(PermissionHolder.ALL_FEATURES) || !player.hasPermission(PermissionHolder.ALL_COMMANDS) || !player.hasPermission(PermissionHolder.CLEAR_CHAT)) {
+            player.sendMessage(LumaniaChatPlugin.NO_PERMISSIONS);
             return false;
         }
 
         if(strings.length == 0) {
             Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
-                if(!onlinePlayer.hasPermission("lumania.chat.clear"))
+                if(!onlinePlayer.hasPermission(PermissionHolder.ALL_FEATURES) || !onlinePlayer.hasPermission(PermissionHolder.ALL_BYPASSES) || !onlinePlayer.hasPermission(PermissionHolder.CLEAR_CHAT_BYPASS))
                     onlinePlayer.sendMessage("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
             });
 

@@ -1,6 +1,7 @@
 package net.lumania.chat.commands;
 
 import net.lumania.chat.LumaniaChatPlugin;
+import net.lumania.chat.utils.PermissionHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,8 +22,8 @@ public class SpyCommand implements CommandExecutor {
         if(!(sender instanceof Player player))
             return false;
 
-        if(!player.hasPermission("lumania.chat.spy")) {
-            player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Du hast nicht genügend Rechte§8.");
+        if(!player.hasPermission(PermissionHolder.ALL_FEATURES) || !player.hasPermission(PermissionHolder.ALL_COMMANDS) || !player.hasPermission(PermissionHolder.SPY_PLAYER)) {
+            player.sendMessage(LumaniaChatPlugin.NO_PERMISSIONS);
             return false;
         }
 
@@ -37,9 +38,14 @@ public class SpyCommand implements CommandExecutor {
                 return false;
             }
 
-            LumaniaChatPlugin.SPAM_CACHE.remove(player.getUniqueId());
+            LumaniaChatPlugin.SPY_CACHE.remove(player.getUniqueId());
             player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Du hast erfolgreich die Spionage beendet§8.");
 
+            return false;
+        }
+
+        if(LumaniaChatPlugin.SPY_CACHE.containsKey(player.getUniqueId())) {
+            player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Du bist bereits am spionieren§8.");
             return false;
         }
 
@@ -49,11 +55,6 @@ public class SpyCommand implements CommandExecutor {
 
         if(spyPlayer == null || !spyPlayer.isOnline()) {
             player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Der genannte Spieler ist nicht Online§8.");
-            return false;
-        }
-
-        if(LumaniaChatPlugin.SPY_CACHE.containsKey(player.getUniqueId())) {
-            player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Du bist bereits am spionieren§8.");
             return false;
         }
 

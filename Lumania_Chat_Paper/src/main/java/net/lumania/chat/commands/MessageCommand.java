@@ -115,4 +115,15 @@ public class MessageCommand implements CommandExecutor {
 
         return ChatColor.translateAlternateColorCodes('&', message);
     }
+
+    private boolean isUnicode(String message) {
+        for(int i = 0; i < message.length(); i++) {
+            int c = message.charAt(i);
+
+            if(c > 128)
+                return true;
+        }
+
+        return false;
+    }
 }

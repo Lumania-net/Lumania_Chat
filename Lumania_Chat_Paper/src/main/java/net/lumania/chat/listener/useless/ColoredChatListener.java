@@ -1,4 +1,4 @@
-package net.lumania.chat.listener;
+package net.lumania.chat.listener.useless;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
@@ -22,11 +22,8 @@ public class ColoredChatListener implements Listener {
 
     private final Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler
     public void playerChatListener(AsyncChatEvent event) {
-        if(event.isCancelled())
-            return;
-
         TextComponent textComponent = (TextComponent) event.message();
 
         String message = this.formatColors(textComponent.content());

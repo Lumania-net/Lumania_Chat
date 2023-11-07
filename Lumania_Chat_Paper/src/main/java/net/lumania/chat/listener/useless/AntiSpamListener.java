@@ -1,4 +1,4 @@
-package net.lumania.chat.listener;
+package net.lumania.chat.listener.useless;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.TextComponent;
@@ -17,7 +17,7 @@ public class AntiSpamListener implements Listener {
         this.chatPlugin = chatPlugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler
     public void playerChatListener(AsyncChatEvent event) {
         if(event.isCancelled())
             return;
@@ -40,6 +40,10 @@ public class AntiSpamListener implements Listener {
             player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Warte noch ein bisschen auf die nächste Nachricht§8.");
 
             this.chatPlugin.getLoggingService().addLog(LoggingType.VIOLATION, player.getName() + " tried to spam");
+
+            return;
         }
+
+        LumaniaChatPlugin.SPAM_CACHE.put(player.getUniqueId(), System.currentTimeMillis());
     }
 }

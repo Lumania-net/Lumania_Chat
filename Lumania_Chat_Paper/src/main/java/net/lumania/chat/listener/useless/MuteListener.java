@@ -1,4 +1,4 @@
-package net.lumania.chat.listener;
+package net.lumania.chat.listener.useless;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.lumania.chat.LumaniaChatPlugin;
@@ -15,11 +15,8 @@ public class MuteListener implements Listener {
         this.chatPlugin = chatPlugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler
     public void playerChatListener(AsyncChatEvent event) {
-        if(event.isCancelled())
-            return;
-
         if(LumaniaChatPlugin.MUTED)
             return;
 

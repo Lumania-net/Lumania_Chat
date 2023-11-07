@@ -1,4 +1,4 @@
-package net.lumania.chat.listener;
+package net.lumania.chat.listener.useless;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.TextComponent;
@@ -16,11 +16,8 @@ public class AntiCapsListener implements Listener {
         this.chatPlugin = chatPlugin;
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler
     public void playerChatListener(AsyncChatEvent event) {
-        if(event.isCancelled())
-            return;
-
         Player player = event.getPlayer();
 
         if(player.hasPermission("lumania.chat.caps"))

@@ -1,4 +1,4 @@
-package net.lumania.chat.listener;
+package net.lumania.chat.listener.useless;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.TextComponent;

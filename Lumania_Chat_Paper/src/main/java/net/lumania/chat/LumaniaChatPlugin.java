@@ -24,8 +24,6 @@ public class LumaniaChatPlugin extends JavaPlugin {
     public static final Map<UUID, UUID> MESSAGE_CACHE = new HashMap<>();
     public static final Map<UUID, UUID> SPY_CACHE = new HashMap<>();
 
-    public static final Map<String, String> CONFIG_PERMISSIONS = new HashMap<>();
-
     public static boolean MUTED;
 
     private LumaniaChatPlugin instance;
@@ -37,14 +35,8 @@ public class LumaniaChatPlugin extends JavaPlugin {
     public void onEnable() {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
-        if(!this.getDataFolder().exists()) {
+        if(!this.getDataFolder().exists())
             this.getDataFolder().mkdirs();
-
-            File logsDirectory = new File(this.getDataFolder(), "/logs/");
-
-            if(!logsDirectory.exists())
-                logsDirectory.mkdirs();
-        }
 
         this.saveDefaultConfig();
         this.loadConfigValues();

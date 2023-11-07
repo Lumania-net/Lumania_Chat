@@ -21,11 +21,15 @@ public class LoggingService {
     }
 
     public void addLog(LoggingType loggingType, String message) {
-        this.textLogs.add(this.getCurrentDate() + " " + loggingType.name() + " " + message);
+        this.textLogs.add("[" + this.getCurrentLogTime() + "] [" + loggingType.name() + "] " + message);
     }
 
     public void saveLog() throws IOException {
-        File file = new File(this.chatPlugin.getDataFolder() + "/logs/", this.getCurrentDate() + "-logs.txt");
+        this.chatPlugin.getLogger().info(this.textLogs.size() + " size of text logs");
+
+        String datetime = this.getCurrentDate();
+
+        File file = new File(this.chatPlugin.getDataFolder(), datetime + "-log.txt");
 
         if(!file.exists())
             file.createNewFile();
@@ -39,12 +43,23 @@ public class LoggingService {
         fileWriter.close();
 
         this.textLogs.clear();
+
+        this.chatPlugin.getLogger().info("Saved log successfully in " + file.getName());
     }
 
     private String getCurrentDate() {
         long currentTime = System.currentTimeMillis();
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy-HH:mm");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy HH_mm_ss");
+        Date date = new Date(currentTime);
+
+        return simpleDateFormat.format(date);
+    }
+
+    private String getCurrentLogTime() {
+        long currentTime = System.currentTimeMillis();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         Date date = new Date(currentTime);
 
         return simpleDateFormat.format(date);

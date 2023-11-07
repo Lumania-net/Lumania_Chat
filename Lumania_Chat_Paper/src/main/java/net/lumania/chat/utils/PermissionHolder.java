@@ -21,6 +21,9 @@ public class PermissionHolder {
     public static String MUTE_CHAT_BYPASS;
     public static String CLEAR_CHAT_BYPASS;
 
+    public static double ANTI_CAPS_PERCENTAGE;
+    public static int ANTI_CAPS_MIN_LENGTH;
+
     public static void load(FileConfiguration fileConfiguration) {
         ALL_BYPASSES = fileConfiguration.getString("permissions.allBypasses");
         ALL_COMMANDS = fileConfiguration.getString("permissions.allCommands");
@@ -38,5 +41,8 @@ public class PermissionHolder {
         ANTI_UNICODE_BYPASS = fileConfiguration.getString("permissions.bypasses.antiUnicodeBypass");
         MUTE_CHAT_BYPASS = fileConfiguration.getString("permissions.bypasses.muteChatBypass");
         CLEAR_CHAT_BYPASS = fileConfiguration.getString("permissions.bypasses.clearChatBypass");
+
+        ANTI_CAPS_PERCENTAGE = fileConfiguration.getDouble("antiCaps.capsPercentageLimit");
+        ANTI_CAPS_MIN_LENGTH = fileConfiguration.getInt("antiCaps.capsMinTextLength");
     }
 }

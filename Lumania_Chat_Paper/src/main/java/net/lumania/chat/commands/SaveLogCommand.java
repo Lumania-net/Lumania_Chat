@@ -37,7 +37,7 @@ public class SaveLogCommand implements CommandExecutor {
             } catch (IOException e) {
                 e.printStackTrace();
 
-                player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Der Log konnte nicht gespeichert werden§8! §7Überprüfe den Log§8.");
+                player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Der Log konnte nicht gespeichert werden§8! §7Überprüfe die Konsole§8.");
             }
 
             return false;

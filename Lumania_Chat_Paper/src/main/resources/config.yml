@@ -20,3 +20,7 @@ permissions:
     clearChatBypass: 'lumania.chat.clear.bypass'
 
   noPermissionsMessage: '&7Du hast nicht genügend Rechte&8!' # prefix is set already
+
+antiCaps:
+  capsPercentageLimit: 50
+  capsMinTextLength: 8 # without digits included -> test == test123

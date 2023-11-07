@@ -92,7 +92,9 @@ public class PlayerChatListener implements Listener {
 
         /***** CAPS *****/
 
-        if(getCapsPercentage(message) > 50 && (!allFeatures || !allBypasses || !player.hasPermission(PermissionHolder.ANTI_CAPS_BYPASS))) {
+        int textLength = this.getTextLength(message);
+
+        if(textLength >= PermissionHolder.ANTI_CAPS_MIN_LENGTH && getCapsPercentage(message) > PermissionHolder.ANTI_CAPS_PERCENTAGE && (!allFeatures || !allBypasses || !player.hasPermission(PermissionHolder.ANTI_CAPS_BYPASS))) {
             player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Nicht so viele Großbuchstaben§8!");
             event.setCancelled(true);
 
@@ -165,6 +167,19 @@ public class PlayerChatListener implements Listener {
                 spyPlayer.sendMessage(LumaniaChatPlugin.PREFIX + "§e§l" + player.getName() + "§8 -> §7" + message);
             }
         }
+    }
+
+    private int getTextLength(String message) {
+        int result = 0;
+
+        for(int i = 0; i < message.length(); i++) {
+            char temp = message.charAt(i);
+
+            if ((temp >= 'a' && temp <= 'z') || (temp >= 'A' && temp <= 'Z'))
+                result++;
+        }
+
+        return result;
     }
 
     /**

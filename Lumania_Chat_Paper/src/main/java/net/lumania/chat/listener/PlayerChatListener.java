@@ -33,8 +33,6 @@ public class PlayerChatListener implements Listener {
 
     @EventHandler
     public void playerChatListener(AsyncChatEvent event) {
-        long currentTimeMillis = System.currentTimeMillis();
-
         Player player = event.getPlayer();
 
         boolean allFeatures = player.hasPermission(PermissionHolder.ALL_FEATURES);
@@ -59,7 +57,7 @@ public class PlayerChatListener implements Listener {
             event.setCancelled(true);
         }
 
-        // ADS -> SWEAR -> CAPS -> SPAM -> MENTION
+        // ADS -> SWEAR -> CAPS -> MENTION
 
         /***** FORMAT COLORS *****/
 
@@ -68,6 +66,17 @@ public class PlayerChatListener implements Listener {
         /***** ADS *****/
 
         /***** SWEAR *****/
+
+        String filteredMessage = message.replaceAll("[^a-zA-Z0-9]", "").replaceAll("1", "i").replaceAll("2", "z").replaceAll("3", "e").replaceAll("4", "h").replaceAll("5", "s").replaceAll("6", "g").replaceAll("7", "t").replaceAll("8", "p").replaceAll("9", "j").replaceAll("0", "o").toLowerCase();
+
+        for(String swearWords : LumaniaChatPlugin.SWEAR_WORDS) {
+            if(filteredMessage.contains(swearWords)) {
+                event.setCancelled(true);
+                player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Dieses Wort ist nicht erlaubt§8.");
+
+                this.chatPlugin.getLoggingService().addLog(LoggingType.VIOLATION, player.getName() + " said a swear word: " + swearWords);
+            }
+        }
 
         /***** CAPS *****/
 
@@ -78,23 +87,6 @@ public class PlayerChatListener implements Listener {
             event.setCancelled(true);
 
             return;
-        }
-
-        /***** SPAM *****/
-
-        if(!allFeatures || !allBypasses || !player.hasPermission(PermissionHolder.ANTI_SPAM_BYPASS)) {
-            if (LumaniaChatPlugin.SPAM_CACHE.containsKey(player.getUniqueId())) {
-                long lastMessage = LumaniaChatPlugin.SPAM_CACHE.get(player.getUniqueId());
-
-                if (lastMessage + 1000L > currentTimeMillis) {
-                    event.setCancelled(true);
-                    player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Warte vor deiner nächsten Nachricht§8.");
-
-                    return;
-                }
-            }
-
-            LumaniaChatPlugin.SPAM_CACHE.put(player.getUniqueId(), currentTimeMillis);
         }
 
         event.message(Component.text(message));

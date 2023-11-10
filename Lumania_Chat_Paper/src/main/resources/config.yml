@@ -1,19 +1,17 @@
 prefix: '&b&lLUMANIA &8•&7 '
 
 permissions:
-  allBypasses: lumania.chat.bypasses.*
-  allCommands: lumania.chat.commands.*
-  allFeatures: lumania.chat.*
+  allBypasses: 'lumania.chat.bypasses.*'
+  allCommands: 'lumania.chat.commands.*'
+  allFeatures: 'lumania.chat.*'
 
   clearChat: 'lumania.chat.clear'
   muteChat: 'lumania.chat.mute'
-  spyPlayer: 'lumania.chat.spy'
   saveLogs: 'lumania.chat.logs'
 
   bypasses:
     antiAdsBypass: 'lumania.chat.ads'
     antiSwearBypass: 'lumania.chat.swear'
-    antiSpamBypass: 'lumania.chat.spam'
     antiCapsBypass: 'lumania.chat.caps'
     antiUnicodeBypass: 'lumania.chat.unicode'
     muteChatBypass: 'lumania.chat.mute.bypass'
@@ -21,6 +19,10 @@ permissions:
 
   noPermissionsMessage: '&7Du hast nicht genügend Rechte&8!' # prefix is set already
 
-antiCaps:
-  capsPercentageLimit: 50
-  capsMinTextLength: 8 # without digits included -> test == test123
+swearWords:
+  - 'hurensohn'
+  - 'hvrensohn'
+  - 'hure'
+  - 'huren'
+  - 'huan'
+  - '.............................'

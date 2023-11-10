@@ -1,6 +1,7 @@
 package net.lumania.chat.listeners;
 
 import net.lumania.chat.LumaniaChatPlugin;
+import net.lumania.chat.utils.PermissionHolder;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -27,6 +28,20 @@ public class PlayerChatListener implements Listener {
     public void playerChatListener(ChatEvent event) {
         if(!(event.getSender() instanceof ProxiedPlayer player))
             return;
+
+        if(!player.hasPermission(PermissionHolder.ALL_FEATURES_PERMISSION) || !player.hasPermission(PermissionHolder.ALL_BYPASSES_PERMISSION) || !player.hasPermission(PermissionHolder.ANTI_SPAM_BYPASS)) {
+            long currentTimeMillis = System.currentTimeMillis();
+            if(LumaniaChatPlugin.SPAM_CACHE.containsKey(player.getUniqueId())) {
+                long lastMessage = LumaniaChatPlugin.SPAM_CACHE.get(player.getUniqueId());
+
+                if(lastMessage + (PermissionHolder.ANTI_SPAM_COUNTDOWN * 1000) > currentTimeMillis) {
+                    player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Warte vor deiner nächsten Nachricht§8."));
+                    event.setCancelled(true);
+                }
+            }
+
+            LumaniaChatPlugin.SPAM_CACHE.put(player.getUniqueId(), currentTimeMillis);
+        }
 
         if(!LumaniaChatPlugin.SPY_CACHE.containsValue(player.getUniqueId()))
             return;

@@ -64,4 +64,8 @@ public class LoggingService {
 
         return simpleDateFormat.format(date);
     }
+
+    public List<String> getTextLogs() {
+        return textLogs;
+    }
 }

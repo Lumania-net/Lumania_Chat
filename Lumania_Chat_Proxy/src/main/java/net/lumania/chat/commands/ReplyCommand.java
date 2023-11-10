@@ -1,6 +1,7 @@
 package net.lumania.chat.commands;
 
 import net.lumania.chat.LumaniaChatPlugin;
+import net.lumania.chat.utils.PermissionHolder;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -60,6 +61,14 @@ public class ReplyCommand extends Command {
             return;
         }
 
+        int textLength = this.getTextLength(message);
+        double capsPercentage = this.getCapsPercentage(message);
+
+        if(textLength >= PermissionHolder.ANTI_CAPS_MIN_LENGTH && (!player.hasPermission(PermissionHolder.ALL_BYPASSES_PERMISSION) || !player.hasPermission(PermissionHolder.ANTI_CAPS_BYPASS) || !player.hasPermission(PermissionHolder.ALL_FEATURES_PERMISSION)) && capsPercentage > PermissionHolder.ANTI_CAPS_PERCENTAGE) {
+            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Nicht so viele Großbuchstaben§8!"));
+            return;
+        }
+
         player.sendMessage(new TextComponent("§e§lDu§8: §f" + message));
         sendPlayer.sendMessage(new TextComponent("§e§l" + player.getName() + "§8: §f"  + message));
 
@@ -88,5 +97,31 @@ public class ReplyCommand extends Command {
         }
 
         return false;
+    }
+
+    private double getCapsPercentage(String string) {
+        int uppers = 0;
+
+        for (int i = 0; i < string.length(); i++) {
+            char c = string.charAt(i);
+
+            if (Character.isUpperCase(c))
+                uppers++;
+        }
+
+        return (uppers * 100.0) / string.length();
+    }
+
+    private int getTextLength(String message) {
+        int result = 0;
+
+        for(int i = 0; i < message.length(); i++) {
+            char temp = message.charAt(i);
+
+            if ((temp >= 'a' && temp <= 'z') || (temp >= 'A' && temp <= 'Z'))
+                result++;
+        }
+
+        return result;
     }
 }

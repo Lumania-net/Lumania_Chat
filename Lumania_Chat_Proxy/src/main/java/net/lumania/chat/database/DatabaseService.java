@@ -3,6 +3,7 @@ package net.lumania.chat.database;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import net.lumania.chat.LumaniaChatPlugin;
+import net.lumania.chat.utils.PermissionHolder;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -18,12 +19,12 @@ public class DatabaseService {
 
     private final Connection connection;
 
-    public DatabaseService(LumaniaChatPlugin chatPlugin, String host, String username, String password, String database, int port) {
+    public DatabaseService(LumaniaChatPlugin chatPlugin) {
         HikariConfig hikariConfig = new HikariConfig();
 
-        hikariConfig.setJdbcUrl("jdbc:mariadb://" + host + ":" + port + "/" + database);
-        hikariConfig.setUsername(username);
-        hikariConfig.setPassword(password);
+        hikariConfig.setJdbcUrl("jdbc:mariadb://" + PermissionHolder.DATABASE_HOST + ":" + PermissionHolder.DATABASE_PORT + "/" + PermissionHolder.DATABASE_DATABASE);
+        hikariConfig.setUsername(PermissionHolder.DATABASE_USERNAME);
+        hikariConfig.setPassword(PermissionHolder.DATABASE_PASSWORD);
 
         hikariConfig.addDataSourceProperty("cachePrepStmts", true);
         hikariConfig.addDataSourceProperty("prepStmtCacheSize", "250");

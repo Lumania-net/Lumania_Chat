@@ -7,6 +7,7 @@ import net.lumania.chat.database.DatabaseService;
 import net.lumania.chat.listeners.PlayerChatListener;
 import net.lumania.chat.listeners.PlayerJoinListener;
 import net.lumania.chat.listeners.PlayerQuitListener;
+import net.lumania.chat.utils.PermissionHolder;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -28,6 +29,7 @@ public class LumaniaChatPlugin extends Plugin {
 
     public static final Map<UUID, UUID> MESSAGE_CACHE = new HashMap<>();
     public static final Map<UUID, UUID> SPY_CACHE = new HashMap<>();
+    public static final Map<UUID, Long> SPAM_CACHE = new HashMap<>();
 
     public static final Map<UUID, Boolean> MESSAGE_TOGGLE_CACHE = new HashMap<>();
 
@@ -35,9 +37,12 @@ public class LumaniaChatPlugin extends Plugin {
 
     private LumaniaChatPlugin instance;
     private DatabaseService databaseService;
+    private PermissionHolder permissionHolder;
 
     @Override
     public void onEnable() {
+        permissionHolder = new PermissionHolder(this);
+
         ProxyServer.getInstance().getPluginManager().registerListener(this, new PlayerChatListener(this));
         ProxyServer.getInstance().getPluginManager().registerListener(this, new PlayerQuitListener(this));
         ProxyServer.getInstance().getPluginManager().registerListener(this, new PlayerJoinListener(this));
@@ -58,7 +63,9 @@ public class LumaniaChatPlugin extends Plugin {
         String noPermissionsMessage = this.chatConfiguration.getString("permissions.noPermissionsMessage").replaceAll("&", "§");
         NO_PERMISSIONS = PREFIX + noPermissionsMessage;
 
-        this.databaseService = new DatabaseService(this, this.chatConfiguration.getString("database.host"), this.chatConfiguration.getString("database.username"), this.chatConfiguration.getString("database.password"), this.chatConfiguration.getString("database.database"), this.chatConfiguration.getInt("database.port"));
+        this.permissionHolder.loadConfig(this.chatConfiguration);
+
+        this.databaseService = new DatabaseService(this);
     }
 
     @Override
@@ -71,6 +78,7 @@ public class LumaniaChatPlugin extends Plugin {
         SPY_CACHE.clear();
         MESSAGE_CACHE.clear();
         MESSAGE_TOGGLE_CACHE.clear();
+        SPAM_CACHE.clear();
 
         try {
             this.getDatabaseService().getDataSource().getConnection().close();
@@ -99,5 +107,13 @@ public class LumaniaChatPlugin extends Plugin {
 
     public DatabaseService getDatabaseService() {
         return databaseService;
+    }
+
+    public Configuration getChatConfiguration() {
+        return chatConfiguration;
+    }
+
+    public PermissionHolder getPermissionHolder() {
+        return permissionHolder;
     }
 }

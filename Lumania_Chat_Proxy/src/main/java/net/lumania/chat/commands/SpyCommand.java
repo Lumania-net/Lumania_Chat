@@ -18,8 +18,8 @@ public class SpyCommand extends Command {
         if(!(sender instanceof ProxiedPlayer player))
             return;
 
-        if(!player.hasPermission("")) { // TODO: CONFIGURABLE PERMISSION
-            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Du hast nicht genügend Rechte§8."));
+        if(!player.hasPermission("")) {
+            player.sendMessage(new TextComponent(LumaniaChatPlugin.NO_PERMISSIONS));
             return;
         }
 

@@ -31,9 +31,10 @@ public class MessageCommand extends Command {
 
         if(strings.length == 1) {
             if(strings[0].equalsIgnoreCase("toggle")) {
-                // TODO: TOGGLE MSG
+                boolean activated = LumaniaChatPlugin.MESSAGE_TOGGLE_CACHE.get(player.getUniqueId());
+                LumaniaChatPlugin.MESSAGE_TOGGLE_CACHE.put(player.getUniqueId(), !activated);
 
-                player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Du hast die Nachrichten erfolgreich deaktiviert/aktiviert§8."));
+                player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Du hast die Nachrichten erfolgreich " + (activated ? "aktiviert" : "deaktviert") + "§8."));
             } else
                 player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§8/§e§lmsg §8<§e§lplayer§8 | §e§ltoggle§8> <§e§lmsg§8> - §7Entweder Messages deaktivieren oder eine Nachricht an einen anderen Spieler schicken"));
 
@@ -54,6 +55,11 @@ public class MessageCommand extends Command {
             return;
         }
 
+        if(!LumaniaChatPlugin.MESSAGE_TOGGLE_CACHE.get(sendPlayer.getUniqueId())) {
+            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Dieser Spieler möchte keine Nachrichten erhalten§8."));
+            return;
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
 
         for(int i = 1; i < strings.length; i++)
@@ -62,7 +68,7 @@ public class MessageCommand extends Command {
         String message = this.formatColors(stringBuilder.toString());
 
         if (this.isUnicode(message)) {
-            player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Keine Unicode Zeichen senden§8!");
+            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Keine Unicode Zeichen senden§8!"));
             return;
         }
 

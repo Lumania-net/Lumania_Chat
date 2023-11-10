@@ -3,6 +3,8 @@ package net.lumania.chat.listener;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.luckperms.api.cacheddata.CachedMetaData;
+import net.luckperms.api.platform.PlayerAdapter;
 import net.lumania.chat.LumaniaChatPlugin;
 import net.lumania.chat.logger.LoggingType;
 import net.lumania.chat.utils.PermissionHolder;
@@ -12,7 +14,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,6 @@ public class PlayerChatListener implements Listener {
     @EventHandler
     public void playerChatListener(AsyncChatEvent event) {
         long currentTimeMillis = System.currentTimeMillis();
-        boolean unicodeMessage = false;
 
         Player player = event.getPlayer();
 
@@ -49,33 +49,8 @@ public class PlayerChatListener implements Listener {
             event.setCancelled(true);
             this.chatPlugin.getLoggingService().addLog(LoggingType.VIOLATION, player.getName() + " sent a unicode");
 
-            unicodeMessage = true;
-        }
-
-        /***** SPY *****/
-
-        if(LumaniaChatPlugin.SPY_CACHE.containsValue(player.getUniqueId())) {
-            for(UUID spies : LumaniaChatPlugin.SPY_CACHE.keySet()) {
-                if(LumaniaChatPlugin.SPY_CACHE.get(spies).equals(player.getUniqueId())) {
-                    Player spyPlayer = Bukkit.getPlayer(spies);
-
-                    if(spyPlayer != null && spyPlayer.isOnline()) {
-                        message = this.formatColors(message);
-
-                        if(unicodeMessage) {
-                            spyPlayer.sendMessage(LumaniaChatPlugin.PREFIX + "§e§l" + player.getName() + "§7 hat eine Unicode Nachricht gesendet§8.");
-
-                            return;
-                        }
-                        else
-                            spyPlayer.sendMessage(LumaniaChatPlugin.PREFIX + "§e§l" + player.getName() + "§8 -> §7" + message);
-                    }
-                }
-            }
-        }
-
-        if(unicodeMessage)
             return;
+        }
 
         /***** MUTED *****/
 
@@ -89,6 +64,10 @@ public class PlayerChatListener implements Listener {
         /***** FORMAT COLORS *****/
 
         message = this.formatColors(message);
+
+        /***** ADS *****/
+
+        /***** SWEAR *****/
 
         /***** CAPS *****/
 
@@ -140,32 +119,12 @@ public class PlayerChatListener implements Listener {
             }
         }
 
+        PlayerAdapter<Player> playerAdapter = this.chatPlugin.getLuckPermsApi().getPlayerAdapter(Player.class);
+        CachedMetaData cachedMetaData = playerAdapter.getMetaData(player);
+
         if(!mentionedPlayers.isEmpty()) {
-            this.mentionPlayer(message, mentionedPlayers);
+            this.mentionPlayer(message, mentionedPlayers, cachedMetaData.getPrefix().replaceAll("&", "§"));
             event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void playerCommandListener(PlayerCommandPreprocessEvent event) {
-        Player player = event.getPlayer();
-
-        String message = event.getMessage();
-
-        if(!LumaniaChatPlugin.SPY_CACHE.containsValue(player.getUniqueId()))
-            return;
-
-        for(UUID spy : LumaniaChatPlugin.SPY_CACHE.keySet()) {
-            if(LumaniaChatPlugin.SPY_CACHE.get(spy).equals(player.getUniqueId())) {
-                Player spyPlayer = Bukkit.getPlayer(LumaniaChatPlugin.SPY_CACHE.get(spy));
-
-                if(spyPlayer == null || !spyPlayer.isOnline()) {
-                    LumaniaChatPlugin.SPY_CACHE.remove(spy);
-                    return;
-                }
-
-                spyPlayer.sendMessage(LumaniaChatPlugin.PREFIX + "§e§l" + player.getName() + "§8 -> §7" + message);
-            }
         }
     }
 
@@ -189,7 +148,7 @@ public class PlayerChatListener implements Listener {
      * @param mentionedPlayers all players mentioned in message
      */
 
-    private void mentionPlayer(String message, List<String> mentionedPlayers) {
+    private void mentionPlayer(String message, List<String> mentionedPlayers, String chatPrefix) {
         List<UUID> alreadyMentioned = new ArrayList<>();
 
         for(String mentionedPlayerName : mentionedPlayers) {
@@ -222,7 +181,7 @@ public class PlayerChatListener implements Listener {
 
         for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if(!alreadyMentioned.contains(onlinePlayer.getUniqueId()))
-                onlinePlayer.sendMessage(message);
+                onlinePlayer.sendMessage(chatPrefix + " " + message);
         }
     }
 

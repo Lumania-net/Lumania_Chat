@@ -25,21 +25,26 @@ public class ReplyCommand extends Command {
             return;
 
         if(strings.length == 0) {
-            player.sendMessage(LumaniaChatPlugin.PREFIX + "§8/§e§lr §8<§e§lmsg§8> - §7Antwort an den letzten Spieler§8, §7der dir eine Nachricht gesendet hat");
+            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§8/§e§lr §8<§e§lmsg§8> - §7Antwort an den letzten Spieler§8, §7der dir eine Nachricht gesendet hat"));
             return;
         }
 
         if(!LumaniaChatPlugin.MESSAGE_CACHE.containsKey(player.getUniqueId())) {
-            player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Du hast noch keine laufende Konversation§8.");
+            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Du hast noch keine laufende Konversation§8."));
             return;
         }
 
         ProxiedPlayer sendPlayer = ProxyServer.getInstance().getPlayer(LumaniaChatPlugin.MESSAGE_CACHE.get(player.getUniqueId()));
 
         if(sendPlayer == null || !sendPlayer.isConnected()) {
-            player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Der Spieler ist nicht mehr Online§8.");
+            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Der Spieler ist nicht mehr Online§8."));
             LumaniaChatPlugin.MESSAGE_CACHE.remove(player.getUniqueId());
 
+            return;
+        }
+
+        if(!LumaniaChatPlugin.MESSAGE_TOGGLE_CACHE.get(sendPlayer.getUniqueId())) {
+            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Dieser Spieler möchte keine Nachrichten erhalten§8."));
             return;
         }
 
@@ -51,7 +56,7 @@ public class ReplyCommand extends Command {
         String message = this.formatColors(stringBuilder.toString());
 
         if (this.isUnicode(message)) {
-            player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Keine Unicode Zeichen senden§8!");
+            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Keine Unicode Zeichen senden§8!"));
             return;
         }
 

@@ -9,8 +9,15 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class PlayerQuitListener implements Listener {
+
+    private final LumaniaChatPlugin chatPlugin;
+
+    public PlayerQuitListener(LumaniaChatPlugin chatPlugin) {
+        this.chatPlugin = chatPlugin;
+    }
 
     @EventHandler
     public void playerQuitListener(PlayerDisconnectEvent event) {
@@ -41,5 +48,16 @@ public class PlayerQuitListener implements Listener {
                     LumaniaChatPlugin.MESSAGE_CACHE.remove(message);
             }
         }
+
+        boolean messageToggle = LumaniaChatPlugin.MESSAGE_TOGGLE_CACHE.get(player.getUniqueId());
+
+        LumaniaChatPlugin.MESSAGE_TOGGLE_CACHE.remove(player.getUniqueId());
+
+        CompletableFuture.runAsync(() -> {
+            if(this.chatPlugin.getDatabaseService().playerInDatabase(player.getUniqueId()))
+                this.chatPlugin.getDatabaseService().updatePlayer(player.getUniqueId(), messageToggle);
+            else
+                this.chatPlugin.getDatabaseService().setupPlayer(player.getUniqueId(), messageToggle);
+        });
     }
 }

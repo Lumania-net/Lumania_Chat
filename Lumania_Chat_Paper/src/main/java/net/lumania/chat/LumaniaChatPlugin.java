@@ -1,17 +1,17 @@
 package net.lumania.chat;
 
+import net.luckperms.api.LuckPerms;
 import net.lumania.chat.commands.*;
 import net.lumania.chat.listener.PlayerChatListener;
 import net.lumania.chat.listener.PlayerQuitListener;
-import net.lumania.chat.listener.useless.*;
 import net.lumania.chat.logger.LoggingService;
 import net.lumania.chat.utils.AdvertisementService;
 import net.lumania.chat.utils.PermissionHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -31,6 +31,8 @@ public class LumaniaChatPlugin extends JavaPlugin {
     private LoggingService loggingService;
     private AdvertisementService advertisementService;
 
+    private LuckPerms luckPermsApi;
+
     @Override
     public void onEnable() {
         PluginManager pluginManager = Bukkit.getPluginManager();
@@ -41,30 +43,20 @@ public class LumaniaChatPlugin extends JavaPlugin {
         this.saveDefaultConfig();
         this.loadConfigValues();
 
-        /*
-        pluginManager.registerEvents(new AntiAdvertisementListener(this), this);
-        pluginManager.registerEvents(new AntiCapsListener(this), this);
-        pluginManager.registerEvents(new AntiSpamListener(this), this);
-        pluginManager.registerEvents(new AntiSwearListener(this), this);
-        pluginManager.registerEvents(new AntiUnicodeListener(this), this);
-        pluginManager.registerEvents(new ColoredChatListener(this), this);
-        pluginManager.registerEvents(new MuteListener(this), this);
-        pluginManager.registerEvents(new PlayerMentionListener(this), this);
-        pluginManager.registerEvents(new PlayerSpyListener(this), this);
-        */
-
         pluginManager.registerEvents(new PlayerChatListener(this), this);
         pluginManager.registerEvents(new PlayerQuitListener(this), this);
 
         this.getCommand("clearchat").setExecutor(new ClearChatCommand(this));
-        this.getCommand("msg").setExecutor(new MessageCommand(this));
-        this.getCommand("r").setExecutor(new MessageCommand(this));
         this.getCommand("mutechat").setExecutor(new MuteChatCommand(this));
         this.getCommand("savelog").setExecutor(new SaveLogCommand(this));
-        this.getCommand("spy").setExecutor(new SpyCommand(this));
 
         loggingService = new LoggingService(this);
         advertisementService = new AdvertisementService(this);
+
+        RegisteredServiceProvider<LuckPerms> registeredServiceProvider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+
+        if(registeredServiceProvider != null)
+            this.luckPermsApi = registeredServiceProvider.getProvider();
 
         this.getLogger().info("LumaniaChat loaded successfully");
     }
@@ -89,8 +81,8 @@ public class LumaniaChatPlugin extends JavaPlugin {
     }
 
     private void loadConfigValues() {
-        String prefix = this.getConfig().getString("prefix").replaceAll("&", "§");
-        PREFIX = prefix.endsWith(" ") ? prefix : prefix + " ";
+        String configPrefix = this.getConfig().getString("prefix").replaceAll("&", "§");
+        PREFIX = configPrefix.endsWith(" ") ? configPrefix : configPrefix + " ";
 
         String noPermissionsMessage = this.getConfig().getString("permissions.noPermissionsMessage").replaceAll("&", "§");
         NO_PERMISSIONS = PREFIX + noPermissionsMessage;
@@ -108,5 +100,9 @@ public class LumaniaChatPlugin extends JavaPlugin {
 
     public AdvertisementService getAdvertisementService() {
         return advertisementService;
+    }
+
+    public LuckPerms getLuckPermsApi() {
+        return luckPermsApi;
     }
 }

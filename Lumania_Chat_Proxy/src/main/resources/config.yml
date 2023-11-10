@@ -1,0 +1,11 @@
+database:
+  host: 'localhost'
+  username: 'root'
+  password: 'password'
+  database: 'lumania_chat'
+  port: 3306
+
+prefix: '§b§lLUMANIA §8•§7 '
+
+permissions:
+  noPermissionsMessage: '&7Du hast nicht genügend Rechte&8!' # prefix is set already

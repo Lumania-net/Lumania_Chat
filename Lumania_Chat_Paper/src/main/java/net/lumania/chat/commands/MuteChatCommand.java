@@ -3,7 +3,6 @@ package net.lumania.chat.commands;
 import net.lumania.chat.LumaniaChatPlugin;
 import net.lumania.chat.logger.LoggingType;
 import net.lumania.chat.utils.PermissionHolder;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,7 +23,7 @@ public class MuteChatCommand implements CommandExecutor {
             return false;
 
         if(!player.hasPermission(PermissionHolder.ALL_FEATURES) || !player.hasPermission(PermissionHolder.ALL_COMMANDS) || !player.hasPermission(PermissionHolder.MUTE_CHAT)) {
-            player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Du hast nicht genügend Rechte§8.");
+            player.sendMessage(LumaniaChatPlugin.NO_PERMISSIONS);
             return false;
         }
 

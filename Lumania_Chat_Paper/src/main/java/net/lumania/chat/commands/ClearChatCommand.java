@@ -34,7 +34,8 @@ public class ClearChatCommand implements CommandExecutor {
                     onlinePlayer.sendMessage("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
             });
 
-            this.chatPlugin.getLoggingService().addLog(LoggingType.INFO, player.getName() + " cleared chat for all");
+            this.chatPlugin.getLoggingService().addLog(LoggingType.INFO, player.getName() + " cleared chat for all",
+                    player.getUniqueId());
         } else if(strings.length == 1) {
             String name = strings[0];
             Player clearPlayer = Bukkit.getPlayer(name);
@@ -46,7 +47,8 @@ public class ClearChatCommand implements CommandExecutor {
 
             clearPlayer.sendMessage("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
 
-            this.chatPlugin.getLoggingService().addLog(LoggingType.INFO, player.getName() + " cleared chat for player: " + name);
+            this.chatPlugin.getLoggingService().addLog(LoggingType.INFO, player.getName() + " cleared chat for " +
+                    "player: " + name, player.getUniqueId());
         } else {
             player.sendMessage(LumaniaChatPlugin.PREFIX + "§8/§e§lclearchat §8- §7Chat Clear für alle Spieler");
             player.sendMessage(LumaniaChatPlugin.PREFIX + "§8/§e§lclearchat §8<§e§lname§8> - §7Chat Clear für bestimmten Spieler");

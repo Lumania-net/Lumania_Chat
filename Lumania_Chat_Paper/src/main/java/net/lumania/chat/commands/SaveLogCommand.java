@@ -5,6 +5,7 @@ import net.lumania.chat.utils.PermissionHolder;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +21,7 @@ public class SaveLogCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if(!(sender instanceof Player player)) {
+        if(!(sender instanceof Player) && sender instanceof ConsoleCommandSender) {
             try {
                 this.chatPlugin.getLoggingService().saveLog();
             } catch (IOException e) {
@@ -30,20 +31,21 @@ public class SaveLogCommand implements CommandExecutor {
             return false;
         }
 
-        if(player.hasPermission(PermissionHolder.ALL_FEATURES) || player.hasPermission(PermissionHolder.ALL_COMMANDS) || player.hasPermission(PermissionHolder.SAVE_LOGS)) {
-            try {
-                this.chatPlugin.getLoggingService().saveLog();
-                player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Der Log wurde erfolgreich gespeichert§8.");
-            } catch (IOException e) {
-                e.printStackTrace();
+        Player player = (Player) sender;
 
-                player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Der Log konnte nicht gespeichert werden§8! §7Überprüfe die Konsole§8.");
-            }
-
+        if(!player.hasPermission(PermissionHolder.ALL_FEATURES) || !player.hasPermission(PermissionHolder.ALL_COMMANDS) || !player.hasPermission(PermissionHolder.SAVE_LOGS)) {
+            player.sendMessage(LumaniaChatPlugin.NO_PERMISSIONS);
             return false;
         }
 
-        player.sendMessage(LumaniaChatPlugin.NO_PERMISSIONS);
+        try {
+            this.chatPlugin.getLoggingService().saveLog();
+            player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Der Log wurde erfolgreich gespeichert§8.");
+        } catch (IOException e) {
+            this.chatPlugin.getLogger().severe("Error while trying to save logs to file");
+
+            player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Der Log konnte nicht gespeichert werden§8! §7Überprüfe die Konsole§8.");
+        }
 
         return false;
     }

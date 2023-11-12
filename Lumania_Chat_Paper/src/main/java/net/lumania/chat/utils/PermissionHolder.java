@@ -4,6 +4,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class PermissionHolder {
 
+    public static String DATABASE_HOST;
+    public static String DATABASE_DATABASE;
+    public static String DATABASE_USERNAME;
+    public static String DATABASE_PASSWORD;
+    public static int DATABASE_PORT;
+
     public static String ALL_BYPASSES;
     public static String ALL_COMMANDS;
     public static String ALL_FEATURES;
@@ -24,7 +30,15 @@ public class PermissionHolder {
     public static double ANTI_CAPS_PERCENTAGE;
     public static int ANTI_CAPS_MIN_LENGTH;
 
+    public static double ANTI_SPAM_COUNTDOWN;
+
     public static void load(FileConfiguration fileConfiguration) {
+        DATABASE_HOST = fileConfiguration.getString("database.host");
+        DATABASE_DATABASE = fileConfiguration.getString("database.database");
+        DATABASE_USERNAME = fileConfiguration.getString("database.username");
+        DATABASE_PASSWORD = fileConfiguration.getString("database.password");
+        DATABASE_PORT = fileConfiguration.getInt("database.port");
+
         ALL_BYPASSES = fileConfiguration.getString("permissions.allBypasses");
         ALL_COMMANDS = fileConfiguration.getString("permissions.allCommands");
         ALL_FEATURES = fileConfiguration.getString("permissions.allFeatures");
@@ -44,5 +58,7 @@ public class PermissionHolder {
 
         ANTI_CAPS_PERCENTAGE = fileConfiguration.getDouble("antiCaps.capsPercentageLimit");
         ANTI_CAPS_MIN_LENGTH = fileConfiguration.getInt("antiCaps.capsMinTextLength");
+
+        ANTI_SPAM_COUNTDOWN = fileConfiguration.getDouble("antiSpam.countdown");
     }
 }

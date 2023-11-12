@@ -10,3 +10,4 @@ commands:
   mutechat:
   savelog:
   spy:
+  savelogsdatabase:

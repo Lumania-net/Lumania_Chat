@@ -31,7 +31,8 @@ public class MuteChatCommand implements CommandExecutor {
             LumaniaChatPlugin.MUTED = !LumaniaChatPlugin.MUTED;
             player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Der Chat ist nun für alle Spieler " + (LumaniaChatPlugin.MUTED ? "gemuted" : "freigegeben") +"§8.");
 
-            this.chatPlugin.getLoggingService().addLog(LoggingType.INFO, player.getName() + (LumaniaChatPlugin.MUTED ? " muted" : " unmuted") + " the chat");
+            this.chatPlugin.getLoggingService().addLog(LoggingType.INFO, player.getName() + (LumaniaChatPlugin.MUTED
+                    ? " muted" : " unmuted") + " the chat", player.getUniqueId());
         } else {
             player.sendMessage(LumaniaChatPlugin.PREFIX + "§8/§e§lmutechat §8- §7Mutet den Chat für alle Spieler ohne genügend Rechte§8.");
         }

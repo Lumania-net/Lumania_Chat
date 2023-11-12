@@ -61,25 +61,7 @@ public class MessageCommand extends Command {
             return;
         }
 
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for(int i = 1; i < strings.length; i++)
-            stringBuilder.append(strings[i]).append(" ");
-
-        String message = this.formatColors(stringBuilder.toString());
-
-        if (this.isUnicode(message)) {
-            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Keine Unicode Zeichen senden§8!"));
-            return;
-        }
-
-        int textLength = this.getTextLength(message);
-        double capsPercentage = this.getCapsPercentage(message);
-
-        if(textLength >= PermissionHolder.ANTI_CAPS_MIN_LENGTH && (!player.hasPermission(PermissionHolder.ALL_BYPASSES_PERMISSION) || !player.hasPermission(PermissionHolder.ANTI_CAPS_BYPASS) || !player.hasPermission(PermissionHolder.ALL_FEATURES_PERMISSION)) && capsPercentage > PermissionHolder.ANTI_CAPS_PERCENTAGE) {
-            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Nicht so viele Großbuchstaben§8!"));
-            return;
-        }
+        String message = this.formatColors(String.join(" ", strings));
 
         player.sendMessage(new TextComponent("§e§lDu§8: §f" + message));
         sendPlayer.sendMessage(new TextComponent("§e§l" + player.getName() + "§8: §f"  + message));
@@ -100,40 +82,4 @@ public class MessageCommand extends Command {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
-    private boolean isUnicode(String message) {
-        for(int i = 0; i < message.length(); i++) {
-            int c = message.charAt(i);
-
-            if(c > 128)
-                return true;
-        }
-
-        return false;
-    }
-
-    private double getCapsPercentage(String string) {
-        int uppers = 0;
-
-        for (int i = 0; i < string.length(); i++) {
-            char c = string.charAt(i);
-
-            if (Character.isUpperCase(c))
-                uppers++;
-        }
-
-        return (uppers * 100.0) / string.length();
-    }
-
-    private int getTextLength(String message) {
-        int result = 0;
-
-        for(int i = 0; i < message.length(); i++) {
-            char temp = message.charAt(i);
-
-            if ((temp >= 'a' && temp <= 'z') || (temp >= 'A' && temp <= 'Z'))
-                result++;
-        }
-
-        return result;
-    }
 }

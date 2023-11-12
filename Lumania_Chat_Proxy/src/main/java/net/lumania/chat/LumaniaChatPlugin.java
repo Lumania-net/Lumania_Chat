@@ -29,7 +29,6 @@ public class LumaniaChatPlugin extends Plugin {
 
     public static final Map<UUID, UUID> MESSAGE_CACHE = new HashMap<>();
     public static final Map<UUID, UUID> SPY_CACHE = new HashMap<>();
-    public static final Map<UUID, Long> SPAM_CACHE = new HashMap<>();
 
     public static final Map<UUID, Boolean> MESSAGE_TOGGLE_CACHE = new HashMap<>();
 
@@ -78,7 +77,6 @@ public class LumaniaChatPlugin extends Plugin {
         SPY_CACHE.clear();
         MESSAGE_CACHE.clear();
         MESSAGE_TOGGLE_CACHE.clear();
-        SPAM_CACHE.clear();
 
         try {
             this.getDatabaseService().getDataSource().getConnection().close();

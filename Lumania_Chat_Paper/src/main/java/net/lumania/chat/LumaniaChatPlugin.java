@@ -2,6 +2,7 @@ package net.lumania.chat;
 
 import net.luckperms.api.LuckPerms;
 import net.lumania.chat.commands.*;
+import net.lumania.chat.database.DatabaseService;
 import net.lumania.chat.listener.PlayerChatListener;
 import net.lumania.chat.logger.LoggingService;
 import net.lumania.chat.utils.AdvertisementService;
@@ -20,6 +21,7 @@ public class LumaniaChatPlugin extends JavaPlugin {
     public static String NO_PERMISSIONS;
 
     public static final List<String> SWEAR_WORDS = new ArrayList<>();
+    public static final Map<UUID, Long> SPAM_CACHE = new HashMap<>();
 
     public static boolean MUTED;
 
@@ -27,6 +29,7 @@ public class LumaniaChatPlugin extends JavaPlugin {
 
     private LoggingService loggingService;
     private AdvertisementService advertisementService;
+    private DatabaseService databaseService;
 
     private LuckPerms luckPermsApi;
 
@@ -45,9 +48,11 @@ public class LumaniaChatPlugin extends JavaPlugin {
         this.getCommand("clearchat").setExecutor(new ClearChatCommand(this));
         this.getCommand("mutechat").setExecutor(new MuteChatCommand(this));
         this.getCommand("savelog").setExecutor(new SaveLogCommand(this));
+        this.getCommand("savelogsdatabase").setExecutor(new SaveLogsDatabaseCommand(this));
 
         loggingService = new LoggingService(this);
         advertisementService = new AdvertisementService(this);
+        databaseService = new DatabaseService(this);
 
         RegisteredServiceProvider<LuckPerms> registeredServiceProvider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
 
@@ -71,6 +76,9 @@ public class LumaniaChatPlugin extends JavaPlugin {
         } catch (IOException e) {
             this.getLogger().severe("Failed while saving log file");
         }
+
+        SWEAR_WORDS.clear();
+        SPAM_CACHE.clear();
     }
 
     private void loadConfigValues() {
@@ -99,5 +107,9 @@ public class LumaniaChatPlugin extends JavaPlugin {
 
     public LuckPerms getLuckPermsApi() {
         return luckPermsApi;
+    }
+
+    public DatabaseService getDatabaseService() {
+        return databaseService;
     }
 }

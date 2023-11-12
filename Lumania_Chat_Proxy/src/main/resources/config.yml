@@ -1,7 +1,7 @@
 database:
   host: 'localhost'
   username: 'root'
-  password: 'password'
+  password: ''
   database: 'lumania_chat'
   port: 3306
 
@@ -10,18 +10,12 @@ prefix: '§b§lLUMANIA §8•§7 '
 permissions:
   allFeatures: 'lumania.chat.*'
   allCommands: 'lumania.chat.commands'
+  allBypasses: 'lumania.chat.bypasses'
+
   spyPlayer: 'lumania.chat.spy'
 
   bypasses:
     antiUnicodeBypass: 'lumania.chat.unicode'
-    antiCapsBypass: 'lumania.chat.caps'
-    antiSpamBypass: 'lumania.chat.spam'
 
   noPermissionsMessage: '&7Du hast nicht genügend Rechte&8!' # prefix is set already
 
-antiSpam:
-  countdown: 1.0 # in seconds
-
-antiCaps:
-  minTextLength: 8 # only letter length '123test123' is the same length as 'test'
-  capsPercentage: 50

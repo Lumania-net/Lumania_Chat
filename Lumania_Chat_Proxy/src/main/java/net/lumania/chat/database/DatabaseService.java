@@ -17,7 +17,7 @@ public class DatabaseService {
     private final DataSource dataSource;
     private final LumaniaChatPlugin chatPlugin;
 
-    private final Connection connection;
+    private Connection connection;
 
     public DatabaseService(LumaniaChatPlugin chatPlugin) {
         HikariConfig hikariConfig = new HikariConfig();
@@ -35,8 +35,16 @@ public class DatabaseService {
 
         try {
             this.connection = dataSource.getConnection();
+
+            this.connection.prepareStatement("CREATE TABLE IF NOT EXISTS chat (uuid VARCHAR(64), toggled VARCHAR(10))").executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            this.chatPlugin.getLogger().severe("Error while trying to connect to database");
+            this.chatPlugin.getLogger().severe("Shutting down...");
+
+            this.chatPlugin.getProxy().getPluginManager().unregisterListeners(this.chatPlugin);
+            this.chatPlugin.getProxy().getPluginManager().unregisterCommands(this.chatPlugin);
+
+            this.chatPlugin.onDisable();
         }
     }
 

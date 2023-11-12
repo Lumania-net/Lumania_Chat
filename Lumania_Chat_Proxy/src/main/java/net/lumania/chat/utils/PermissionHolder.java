@@ -23,13 +23,7 @@ public class PermissionHolder {
 
     public static String SPY_PERMISSION;
 
-    public static String ANTI_CAPS_BYPASS;
-    public static String ANTI_SPAM_BYPASS;
-
-    public static double ANTI_SPAM_COUNTDOWN;
-
-    public static double ANTI_CAPS_PERCENTAGE;
-    public static int ANTI_CAPS_MIN_LENGTH;
+    public static String ANTI_UNICODE_BYPASS;
 
     public void loadConfig(Configuration configuration) {
         DATABASE_HOST = configuration.getString("database.host");
@@ -44,12 +38,6 @@ public class PermissionHolder {
 
         SPY_PERMISSION = configuration.getString("permissions.spyPlayer");
 
-        ANTI_CAPS_BYPASS = configuration.getString("permissions.bypasses.antiCapsBypass");
-        ANTI_SPAM_BYPASS = configuration.getString("permissions.bypasses.antiSpamBypass");
-
-        ANTI_SPAM_COUNTDOWN = configuration.getDouble("antiSpam.countdown");
-
-        ANTI_CAPS_PERCENTAGE = configuration.getDouble("antiCaps.capsPercentage");
-        ANTI_CAPS_MIN_LENGTH = configuration.getInt("antiCaps.minTextLength");
+        ANTI_UNICODE_BYPASS = configuration.getString("permissions.bypasses.antiUnicodeBypass");
     }
 }

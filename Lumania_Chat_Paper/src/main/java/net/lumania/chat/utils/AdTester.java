@@ -1,21 +1,11 @@
 package net.lumania.chat.utils;
 
-import net.lumania.chat.LumaniaChatPlugin;
-import net.lumania.chat.logger.LoggingType;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class AdvertisementService {
+public class AdTester {
 
-    private final LumaniaChatPlugin chatPlugin;
-
-
-    public AdvertisementService(LumaniaChatPlugin chatPlugin) {
-        this.chatPlugin = chatPlugin;
-    }
-
-    public boolean containsAdvertisement(String message) {
+    private static boolean containsAdvertisement(String message) {
         message = message.replaceAll("(;|=|:|_|-|,|!|/|\\\\)", ".");
 
         String[] contents = message.replaceAll("(dot|DOT|Dot|dOt|doT|DOt|dOT|DoT|d0t|D0T|D0t|d0t|d0T|D0t|d0T|D0T)", ".").trim().split(" ");
@@ -35,5 +25,9 @@ public class AdvertisementService {
         }
 
         return false;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(containsAdvertisement("Hallo ich habe ein test.de"));
     }
 }

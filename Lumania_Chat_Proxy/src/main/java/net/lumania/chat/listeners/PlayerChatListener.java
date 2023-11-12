@@ -29,20 +29,6 @@ public class PlayerChatListener implements Listener {
         if(!(event.getSender() instanceof ProxiedPlayer player))
             return;
 
-        if(!player.hasPermission(PermissionHolder.ALL_FEATURES_PERMISSION) || !player.hasPermission(PermissionHolder.ALL_BYPASSES_PERMISSION) || !player.hasPermission(PermissionHolder.ANTI_SPAM_BYPASS)) {
-            long currentTimeMillis = System.currentTimeMillis();
-            if(LumaniaChatPlugin.SPAM_CACHE.containsKey(player.getUniqueId())) {
-                long lastMessage = LumaniaChatPlugin.SPAM_CACHE.get(player.getUniqueId());
-
-                if(lastMessage + (PermissionHolder.ANTI_SPAM_COUNTDOWN * 1000) > currentTimeMillis) {
-                    player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Warte vor deiner nächsten Nachricht§8."));
-                    event.setCancelled(true);
-                }
-            }
-
-            LumaniaChatPlugin.SPAM_CACHE.put(player.getUniqueId(), currentTimeMillis);
-        }
-
         if(!LumaniaChatPlugin.SPY_CACHE.containsValue(player.getUniqueId()))
             return;
 
@@ -59,7 +45,7 @@ public class PlayerChatListener implements Listener {
 
             String message = this.formatColors(event.getMessage());
 
-            if(this.isUnicode(message)) {
+            if(this.isUnicode(message) && (!player.hasPermission(PermissionHolder.ALL_BYPASSES_PERMISSION) || !player.hasPermission(PermissionHolder.ALL_FEATURES_PERMISSION) || !player.hasPermission(PermissionHolder.ANTI_UNICODE_BYPASS))) {
                 spyPlayer.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§b" + player.getServer().getInfo().getName() + " §8| §e§l" + player.getName() + "§7 hat eine Unicode Nachricht gesendet§8."));
                 return;
             }
@@ -83,9 +69,7 @@ public class PlayerChatListener implements Listener {
 
     private boolean isUnicode(String message) {
         for(int i = 0; i < message.length(); i++) {
-            int c = message.charAt(i);
-
-            if(c > 128)
+            if(Character.UnicodeBlock.of(message.charAt(i)) != Character.UnicodeBlock.BASIC_LATIN)
                 return true;
         }
 

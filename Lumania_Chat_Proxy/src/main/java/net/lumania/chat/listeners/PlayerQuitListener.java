@@ -23,8 +23,6 @@ public class PlayerQuitListener implements Listener {
     public void playerQuitListener(PlayerDisconnectEvent event) {
         ProxiedPlayer player = event.getPlayer();
 
-        LumaniaChatPlugin.SPAM_CACHE.remove(player.getUniqueId());
-
         LumaniaChatPlugin.SPY_CACHE.remove(player.getUniqueId());
 
         if(LumaniaChatPlugin.SPY_CACHE.containsValue(player.getUniqueId())) {

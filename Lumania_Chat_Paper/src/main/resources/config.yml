@@ -1,5 +1,12 @@
 prefix: '&b&lLUMANIA &8•&7 '
 
+database:
+  host: 'localhost'
+  username: 'root'
+  password: ''
+  database: 'lumania_chat'
+  port: 3306
+
 permissions:
   allBypasses: 'lumania.chat.bypasses.*'
   allCommands: 'lumania.chat.commands.*'
@@ -10,14 +17,22 @@ permissions:
   saveLogs: 'lumania.chat.logs'
 
   bypasses:
-    antiAdsBypass: 'lumania.chat.ads'
-    antiSwearBypass: 'lumania.chat.swear'
-    antiCapsBypass: 'lumania.chat.caps'
-    antiUnicodeBypass: 'lumania.chat.unicode'
+    antiAdsBypass: 'lumania.chat.ads.bypass'
+    antiSwearBypass: 'lumania.chat.swear.bypass'
+    antiCapsBypass: 'lumania.chat.caps.bypass'
+    antiSpamBypass: 'lumania.chat.spam.bypass'
+    antiUnicodeBypass: 'lumania.chat.unicode.bypass'
     muteChatBypass: 'lumania.chat.mute.bypass'
     clearChatBypass: 'lumania.chat.clear.bypass'
 
   noPermissionsMessage: '&7Du hast nicht genügend Rechte&8!' # prefix is set already
+
+antiCaps:
+  capsPercentageLimit: 50
+  capsMinTextLength: 8 # only includes actual letters '123test123' == 'test'
+
+antiSpam:
+  countdown: 1.0 # in seconds
 
 swearWords:
   - 'hurensohn'

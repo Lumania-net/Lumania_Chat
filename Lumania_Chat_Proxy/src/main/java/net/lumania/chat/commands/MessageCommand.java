@@ -35,7 +35,7 @@ public class MessageCommand extends Command {
                 boolean activated = LumaniaChatPlugin.MESSAGE_TOGGLE_CACHE.get(player.getUniqueId());
                 LumaniaChatPlugin.MESSAGE_TOGGLE_CACHE.put(player.getUniqueId(), !activated);
 
-                player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Du hast die Nachrichten erfolgreich " + (activated ? "aktiviert" : "deaktviert") + "§8."));
+                player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Du hast die Nachrichten erfolgreich " + (!activated ? "aktiviert" : "deaktviert") + "§8."));
             } else
                 player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§8/§e§lmsg §8<§e§lplayer§8 | §e§ltoggle§8> <§e§lmsg§8> - §7Entweder Messages deaktivieren oder eine Nachricht an einen anderen Spieler schicken"));
 

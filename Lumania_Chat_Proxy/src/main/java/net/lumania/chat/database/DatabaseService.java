@@ -22,7 +22,7 @@ public class DatabaseService {
     public DatabaseService(LumaniaChatPlugin chatPlugin) {
         HikariConfig hikariConfig = new HikariConfig();
 
-        hikariConfig.setJdbcUrl("jdbc:mariadb://" + PermissionHolder.DATABASE_HOST + ":" + PermissionHolder.DATABASE_PORT + "/" + PermissionHolder.DATABASE_DATABASE);
+        hikariConfig.setJdbcUrl("jdbc:mysql://" + PermissionHolder.DATABASE_HOST + ":" + PermissionHolder.DATABASE_PORT + "/" + PermissionHolder.DATABASE_DATABASE);
         hikariConfig.setUsername(PermissionHolder.DATABASE_USERNAME);
         hikariConfig.setPassword(PermissionHolder.DATABASE_PASSWORD);
 

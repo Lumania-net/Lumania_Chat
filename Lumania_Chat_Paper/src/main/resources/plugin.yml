@@ -5,9 +5,6 @@ author: Marioo
 description: Chat-System Plugin for Lumania Network
 commands:
   clearchat:
-  msg:
-  r:
   mutechat:
   savelog:
-  spy:
   savelogsdatabase:

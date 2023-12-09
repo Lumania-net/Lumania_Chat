@@ -4,7 +4,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import net.lumania.chat.LumaniaChatPlugin;
 import net.lumania.chat.logger.LoggingType;
-import net.lumania.chat.utils.PermissionHolder;
+import net.lumania.chat.utils.ConfigHolder;
 import org.bukkit.Bukkit;
 
 import javax.sql.DataSource;
@@ -22,9 +22,9 @@ public class DatabaseService {
     public DatabaseService(LumaniaChatPlugin chatPlugin) {
         HikariConfig hikariConfig = new HikariConfig();
 
-        hikariConfig.setJdbcUrl("jdbc:mariadb://" + PermissionHolder.DATABASE_HOST + ":" + PermissionHolder.DATABASE_PORT + "/" + PermissionHolder.DATABASE_DATABASE);
-        hikariConfig.setUsername(PermissionHolder.DATABASE_USERNAME);
-        hikariConfig.setPassword(PermissionHolder.DATABASE_PASSWORD);
+        hikariConfig.setJdbcUrl("jdbc:mysql://" + ConfigHolder.DATABASE_HOST + ":" + ConfigHolder.DATABASE_PORT + "/" + ConfigHolder.DATABASE_DATABASE);
+        hikariConfig.setUsername(ConfigHolder.DATABASE_USERNAME);
+        hikariConfig.setPassword(ConfigHolder.DATABASE_PASSWORD);
 
         hikariConfig.addDataSourceProperty("cachePrepStmts", true);
         hikariConfig.addDataSourceProperty("prepStmtCacheSize", "250");
@@ -47,15 +47,16 @@ public class DatabaseService {
     public void addLog(String uuid, String loggingType, String datetime, String action) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO chat_logs (uuid, logging_type, datetime, stamp, player_action) VALUES (?, ?, ?, ?, ?)");
+
             preparedStatement.setString(1, uuid);
             preparedStatement.setString(2, loggingType);
-            preparedStatement.setDate(3, Date.valueOf(datetime.split(" ")[0]));
+            preparedStatement.setString(3, datetime.split(" ")[0]);
             preparedStatement.setString(4, datetime.split(" ")[1]);
             preparedStatement.setString(5, action);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            chatPlugin.getLogger().severe("Error while inserting player into database");
+            chatPlugin.getLogger().severe("Error while inserting log into database");
         }
     }
 

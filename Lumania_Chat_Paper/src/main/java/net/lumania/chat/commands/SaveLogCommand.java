@@ -1,7 +1,7 @@
 package net.lumania.chat.commands;
 
 import net.lumania.chat.LumaniaChatPlugin;
-import net.lumania.chat.utils.PermissionHolder;
+import net.lumania.chat.utils.ConfigHolder;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -33,18 +33,18 @@ public class SaveLogCommand implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if(!player.hasPermission(PermissionHolder.ALL_FEATURES) || !player.hasPermission(PermissionHolder.ALL_COMMANDS) || !player.hasPermission(PermissionHolder.SAVE_LOGS)) {
+        if(!player.hasPermission(ConfigHolder.ALL_FEATURES) || !player.hasPermission(ConfigHolder.ALL_COMMANDS) || !player.hasPermission(ConfigHolder.SAVE_LOGS)) {
             player.sendMessage(LumaniaChatPlugin.NO_PERMISSIONS);
             return false;
         }
 
         try {
-            this.chatPlugin.getLoggingService().saveLog();
-            player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Der Log wurde erfolgreich gespeichert§8.");
+            String fileName = this.chatPlugin.getLoggingService().saveLog();
+            player.sendMessage(ConfigHolder.SAVE_LOG_SUCCESSFULLY_MESSAGE.replaceAll("%file%", fileName));
         } catch (IOException e) {
             this.chatPlugin.getLogger().severe("Error while trying to save logs to file");
 
-            player.sendMessage(LumaniaChatPlugin.PREFIX + "§7Der Log konnte nicht gespeichert werden§8! §7Überprüfe die Konsole§8.");
+            player.sendMessage(ConfigHolder.SAVE_LOG_FAILURE_MESSAGE);
         }
 
         return false;

@@ -4,9 +4,10 @@ import net.luckperms.api.LuckPerms;
 import net.lumania.chat.commands.*;
 import net.lumania.chat.database.DatabaseService;
 import net.lumania.chat.listener.PlayerChatListener;
+import net.lumania.chat.listener.PlayerQuitListener;
 import net.lumania.chat.logger.LoggingService;
 import net.lumania.chat.utils.AdvertisementService;
-import net.lumania.chat.utils.PermissionHolder;
+import net.lumania.chat.utils.ConfigHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -44,6 +45,7 @@ public class LumaniaChatPlugin extends JavaPlugin {
         this.loadConfigValues();
 
         pluginManager.registerEvents(new PlayerChatListener(this), this);
+        pluginManager.registerEvents(new PlayerQuitListener(), this);
 
         this.getCommand("clearchat").setExecutor(new ClearChatCommand(this));
         this.getCommand("mutechat").setExecutor(new MuteChatCommand(this));
@@ -90,7 +92,7 @@ public class LumaniaChatPlugin extends JavaPlugin {
 
         SWEAR_WORDS.addAll(this.getConfig().getStringList("swearWords"));
 
-        PermissionHolder.load(this.getConfig());
+        ConfigHolder.load(this.getConfig());
     }
 
     public LumaniaChatPlugin getInstance() {

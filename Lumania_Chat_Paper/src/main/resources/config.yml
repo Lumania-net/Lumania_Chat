@@ -34,6 +34,9 @@ antiCaps:
 antiSpam:
   countdown: 1.0 # in seconds
 
+mentions:
+  soundName: 'LEVEL_UP'
+
 swearWords:
   - 'hurensohn'
   - 'hvrensohn'
@@ -41,3 +44,37 @@ swearWords:
   - 'huren'
   - 'huan'
   - '.............................'
+
+advertisement:
+  endings:
+    - 'de'
+    - 'net'
+    - 'org'
+    - 'com'
+    - 'io'
+
+permission-groups:
+  default: '&7&lSpieler &7'
+
+
+messages: # %player% player name if available, %target% player name if available, %prefix% available every time
+  spamWarningMessage: '%prefix% &7Warte vor deiner Nächsten Nachricht'
+  unicodeWarningMessage: '%prefix% &7Keine Unicode Zeichen'
+  adsWarningMessage: '%prefix% &7Keine Werbung senden'
+  swearWarningMessage: '%prefix% &7Keine Beleidigungen'
+  capsWarningMessage: '%prefix% &7Nicht so viele Großbuchstaben'
+
+  playerNotOnlineMessage: '%prefix% &7%target% ist nicht Online' # %target%
+
+  clearChatClearedMessage: '%prefix% &7Dein Chat wurde von &b%player% &7gecleart' # %player%
+  clearChatHelpMessage: '%prefix% &7/clearchat || /clearchat <player>' # just write '' if no help message should be displayed
+
+  muteChatBroadcastMessage: '%prefix% &b%player% &7hat den Chat gemutet' # %player%
+  unmuteChatBroadcastMessage: '%prefix% &b%player% &7hat den Chat entstummt' # %player%
+  muteChatHelpMessage: '%prefix% &7/mutechat' # just write '' if no help message should be displayed
+  muteChatMutedMessage: '%prefix% &7Der Chat ist derzeit gemuted'
+
+  saveLogSuccessfullyMessage: '%prefix% &7Der Log wurde erfolgreich unter &b%file% &7gespeichert' # %file% is name of log file
+  saveLogFailureMessage: '%prefix% &7Der Log konnte nicht gespeichert werden'
+
+

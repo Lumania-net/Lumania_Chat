@@ -1,6 +1,7 @@
 package net.lumania.chat.commands;
 
 import net.lumania.chat.LumaniaChatPlugin;
+import net.lumania.chat.utils.PermissionHolder;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -18,7 +19,7 @@ public class SpyCommand extends Command {
         if(!(sender instanceof ProxiedPlayer player))
             return;
 
-        if(!player.hasPermission("")) {
+        if(!player.hasPermission(PermissionHolder.ALL_FEATURES_PERMISSION) || !player.hasPermission(PermissionHolder.ALL_COMMANDS_PERMISSION) || !player.hasPermission(PermissionHolder.SPY_PERMISSION)) {
             player.sendMessage(new TextComponent(LumaniaChatPlugin.NO_PERMISSIONS));
             return;
         }

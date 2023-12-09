@@ -2,9 +2,7 @@ package net.lumania.chat.logger;
 
 import net.lumania.chat.LumaniaChatPlugin;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -26,7 +24,7 @@ public class LoggingService {
         this.textLogs.add("[" + playerUniqueId.toString() + "] [" + this.getCurrentLogTime() + "] [" + loggingType.name() + "] " + message);
     }
 
-    public void saveLog() throws IOException {
+    public String saveLog() throws IOException {
         this.chatPlugin.getLogger().info(this.textLogs.size() + " size of text logs");
 
         String datetime = this.getCurrentDate();
@@ -47,12 +45,14 @@ public class LoggingService {
         this.textLogs.clear();
 
         this.chatPlugin.getLogger().info("Saved log successfully in " + file.getName());
+
+        return file.getName();
     }
 
     private String getCurrentDate() {
         long currentTime = System.currentTimeMillis();
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy HH_mm_ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy_HH_mm_ss");
         Date date = new Date(currentTime);
 
         return simpleDateFormat.format(date);
@@ -76,30 +76,37 @@ public class LoggingService {
 
         CompletableFuture.runAsync(() -> {
             for(String fileName : fileNames) {
+                List<String> logList = new ArrayList<>();
+
                 File logFile = new File(dataFolder, fileName);
 
                 if(!logFile.exists())
                     continue;
 
-                try (Stream<String> stream = Files.lines(Paths.get(logFile.toURI()))) {
-                    stream.forEach(line -> {
-                        String[] contents = line.split(" ");
+                try (BufferedReader bufferedReader = new BufferedReader(new FileReader(logFile))) {
+                    String line;
 
-                        String uuid = contents[0].replace("[", "").replace("]", "");
-                        String datetime = contents[1].replace("[", "").replace("]", "");
-                        String loggingType = contents[2].replace("[", "").replace("]", "");
-
-                        String[] actionArray = new String[contents.length - 3];
-
-                        System.arraycopy(contents, 3, actionArray, 0, contents.length - 3);
-
-                        String action = String.join(" ", actionArray);
-
-                        this.chatPlugin.getDatabaseService().addLog(uuid, loggingType, datetime, action);
-                    });
-                } catch (Exception e) {
-                    this.chatPlugin.getLogger().severe("Error while trying to read lines of log file: " + fileName);
+                    while ((line = bufferedReader.readLine()) != null)
+                        logList.add(line);
+                } catch (IOException e) {
+                    chatPlugin.getLogger().severe("Error while trying to read lines of file " + fileName);
                 }
+
+                logList.forEach(log -> {
+                    String[] contents = log.split(" ");
+
+                    String uuid = contents[0].replace("[", "").replace("]", "");
+                    String datetime = (contents[1] + " " + contents[2]).replace("[", "").replace("]", "");
+                    String loggingType = contents[3].replace("[", "").replace("]", "");
+
+                    String[] actionArray = new String[contents.length - 4];
+
+                    System.arraycopy(contents, 4, actionArray, 0, contents.length - 4);
+
+                    String action = String.join(" ", actionArray);
+
+                    this.chatPlugin.getDatabaseService().addLog(uuid, loggingType, datetime, action);
+                });
             }
         });
     }

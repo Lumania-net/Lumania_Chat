@@ -3,6 +3,8 @@ package net.lumania.chat.utils;
 import net.lumania.chat.LumaniaChatPlugin;
 import net.lumania.chat.logger.LoggingType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,30 +12,32 @@ public class AdvertisementService {
 
     private final LumaniaChatPlugin chatPlugin;
 
-
     public AdvertisementService(LumaniaChatPlugin chatPlugin) {
         this.chatPlugin = chatPlugin;
     }
 
     public boolean containsAdvertisement(String message) {
-        message = message.replaceAll("(;|=|:|_|-|,|!|/|\\\\)", ".");
+        message = message.replaceAll("(dot|DOT|Dot|dOt|doT|DOt|dOT|DoT|d0t|D0T|D0t|d0T|!|,|:|_|-)", ".");
+        Pattern validHostname = Pattern.compile("^(?=(?:.*?[\\.\\,]){1})(?:[a-z][a-z0-9-]*[a-z0-9](?=[\\.,][a-z]|$)[\\.,:;|\\\\]?)+$");
 
-        String[] contents = message.replaceAll("(dot|DOT|Dot|dOt|doT|DOt|dOT|DoT|d0t|D0T|D0t|d0t|d0T|D0t|d0T|D0T)", ".").trim().split(" ");
+        boolean found = false;
 
-        Pattern validHostName = Pattern.compile("^(?=(?:.*?[\\\\.\\\\,]){1})(?:[a-z][a-z0-9-]*[a-z0-9](?=[\\\\.,][a-z]|$)[\\\\.,:;|\\\\\\\\]?)+$");
-        Pattern validIpName = Pattern.compile("^(?:(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(?::\\d*)?$", 2);
+        Matcher matcher = validHostname.matcher(message);
 
-        for (String content : contents) {
-            String tempId = content.trim().toLowerCase().replaceAll("[\\(\\)!@#\\$%\\^\\s\\&\\*;\"'\\?><~`,\\\\a-zA-Z]", "");
-            String tempHost = content.trim().toLowerCase().replaceAll("[\\d\\s\\(\\)!@#\\$%\\^\\s\\&\\*:;\"'\\?><~`,\\\\]", "");
-
-            if (validIpName.matcher(tempId).find())
-                return true;
-
-            if (validHostName.matcher(tempHost).find())
-                return true;
+        while(matcher.find()) {
+            return true;
         }
 
-        return false;
+        message = message.replaceAll(" ", "");
+        String[] messageArr = message.split("\\.");
+
+        for(int i = 0; i < messageArr.length; i++) {
+            for(int j = 0; j < ConfigHolder.DOMAIN_ARRAY.length; j++) {
+                if(messageArr[i].toLowerCase().startsWith(ConfigHolder.DOMAIN_ARRAY[j]))
+                    return true;
+            }
+        }
+
+        return found;
     }
 }

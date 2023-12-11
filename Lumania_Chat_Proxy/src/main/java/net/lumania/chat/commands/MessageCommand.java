@@ -1,7 +1,7 @@
 package net.lumania.chat.commands;
 
 import net.lumania.chat.LumaniaChatPlugin;
-import net.lumania.chat.utils.PermissionHolder;
+import net.lumania.chat.utils.ConfigHolder;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -26,7 +26,9 @@ public class MessageCommand extends Command {
             return;
 
         if(strings.length < 1) {
-            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§8/§e§lmsg §8<§e§lplayer§8 | §e§ltoggle§8> <§e§lmsg§8> - §7Entweder Messages deaktivieren oder eine Nachricht an einen anderen Spieler schicken"));
+            if(ConfigHolder.MESSAGE_HELP_MESSAGE != null)
+                player.sendMessage(new TextComponent(ConfigHolder.MESSAGE_HELP_MESSAGE));
+
             return;
         }
 
@@ -35,9 +37,13 @@ public class MessageCommand extends Command {
                 boolean activated = LumaniaChatPlugin.MESSAGE_TOGGLE_CACHE.get(player.getUniqueId());
                 LumaniaChatPlugin.MESSAGE_TOGGLE_CACHE.put(player.getUniqueId(), !activated);
 
-                player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Du hast die Nachrichten erfolgreich " + (!activated ? "aktiviert" : "deaktviert") + "§8."));
+                if(!activated)
+                    player.sendMessage(new TextComponent(ConfigHolder.MESSAGE_TOGGLE_ACTIVATED_MESSAGE));
+                else
+                    player.sendMessage(new TextComponent(ConfigHolder.MESSAGE_TOGGLE_DEACTIVATED_MESSAGE));
             } else
-                player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§8/§e§lmsg §8<§e§lplayer§8 | §e§ltoggle§8> <§e§lmsg§8> - §7Entweder Messages deaktivieren oder eine Nachricht an einen anderen Spieler schicken"));
+                if(ConfigHolder.MESSAGE_HELP_MESSAGE != null)
+                    player.sendMessage(new TextComponent(ConfigHolder.MESSAGE_HELP_MESSAGE));
 
             return;
         }
@@ -45,19 +51,19 @@ public class MessageCommand extends Command {
         String name = strings[0];
 
         if(name.equalsIgnoreCase(player.getName())) {
-            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Du kannst dir nicht selber eine Nachricht senden§8."));
+            player.sendMessage(new TextComponent(ConfigHolder.MESSAGE_CANT_MESSAGE_YOURSELF_MESSAGE));
             return;
         }
 
         ProxiedPlayer sendPlayer = ProxyServer.getInstance().getPlayer(name);
 
         if(sendPlayer == null || !sendPlayer.isConnected()) {
-            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Der gennante Spieler ist nicht Online§8."));
+            player.sendMessage(new TextComponent(ConfigHolder.MESSAGE_PLAYER_NOT_ONLINE_MESSAGE.replaceAll("%target%", name)));
             return;
         }
 
         if(!LumaniaChatPlugin.MESSAGE_TOGGLE_CACHE.get(sendPlayer.getUniqueId())) {
-            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Dieser Spieler möchte keine Nachrichten erhalten§8."));
+            player.sendMessage(new TextComponent(ConfigHolder.MESSAGE_PLAYER_DOES_NOT_WANT_MESSAGES_MESSAGE.replaceAll("%target%", name)));
             return;
         }
 

@@ -19,3 +19,27 @@ permissions:
 
   noPermissionsMessage: '&7Du hast nicht genügend Rechte&8!' # prefix is set already
 
+
+messages:
+  messageToggleActivatedMessage: '%prefix% &7Du hast die Nachrichten aktiviert'
+  messageToggleDeactivatedMessage: '%prefix% &7Du hast die Nachrichten deaktiviert'
+  messageCantMessageYourselfMessage: '%prefix% &7Du kannst dir nicht selber schreiben'
+  messagePlayerNotOnlineMessage: '%prefix% &b%target% &7ist nicht Online' # %target%
+  messagePlayerDoesNotWantMessagesMessage: '%prefix% &b%target% &7möchte keine Nachrichten' # %target%
+  messageHelpMessage: '%prefix% &7/msg <player|toggle> <nachricht>' # write '' if no help message should be displayed
+
+  replyNoRunningConversationMessage: '%prefix% &7Du hast keine laufende Konversation'
+  replyPlayerNotOnlineMessage: '%prefix% &7Der Spieler ist nicht mehr Online'
+  replyHelpMessage: '%prefix% &7/r <nachricht>' # write '' if no help message should be displayed
+
+  spyNoSpyingRightNowMessage: '%prefix% &7Du spionierst gerade niemanden'
+  spyEndedSpyingMessage: '%prefix% &7Du hast die Spionage beendet'
+  spyAlreadySpyingMessage: '%prefix% &7Du spionierst bereits'
+  spyPlayerNotOnlineMessage: '%prefix% &b%target% &7ist nicht Online' # %target%
+  spyStartSpyingMessage: '%prefix% &7Du spionierst nun &b%target%' # %target%
+  spySpyingPlayerWentOfflineMessage: '%prefix% &b%target%&7, den du spioniert hast, ist nun Offline' # %target%
+  spyHelpMessage: '%prefix% &7/spy <stop|spieler>' # write '' if no help message should be displayed
+
+  unicodeWarningMessage: '%prefix% &b%target% &7hat eine Unicode Nachricht gesendet'
+
+

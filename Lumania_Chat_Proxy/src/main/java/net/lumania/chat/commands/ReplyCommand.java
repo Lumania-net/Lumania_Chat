@@ -1,7 +1,7 @@
 package net.lumania.chat.commands;
 
 import net.lumania.chat.LumaniaChatPlugin;
-import net.lumania.chat.utils.PermissionHolder;
+import net.lumania.chat.utils.ConfigHolder;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -26,26 +26,28 @@ public class ReplyCommand extends Command {
             return;
 
         if(strings.length == 0) {
-            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§8/§e§lr §8<§e§lmsg§8> - §7Antwort an den letzten Spieler§8, §7der dir eine Nachricht gesendet hat"));
+            if(ConfigHolder.REPLY_HELP_MESSAGE != null)
+                player.sendMessage(new TextComponent(ConfigHolder.REPLY_HELP_MESSAGE));
+
             return;
         }
 
         if(!LumaniaChatPlugin.MESSAGE_CACHE.containsKey(player.getUniqueId())) {
-            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Du hast noch keine laufende Konversation§8."));
+            player.sendMessage(new TextComponent(ConfigHolder.REPLY_DONT_HAVE_OPEN_CONVERSATION_MESSAGE));
             return;
         }
 
         ProxiedPlayer sendPlayer = ProxyServer.getInstance().getPlayer(LumaniaChatPlugin.MESSAGE_CACHE.get(player.getUniqueId()));
 
         if(sendPlayer == null || !sendPlayer.isConnected()) {
-            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Der Spieler ist nicht mehr Online§8."));
+            player.sendMessage(new TextComponent(ConfigHolder.REPLY_PLAYER_NOT_ONLINE_MESSAGE));
             LumaniaChatPlugin.MESSAGE_CACHE.remove(player.getUniqueId());
 
             return;
         }
 
         if(!LumaniaChatPlugin.MESSAGE_TOGGLE_CACHE.get(sendPlayer.getUniqueId())) {
-            player.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Dieser Spieler möchte keine Nachrichten erhalten§8."));
+            player.sendMessage(new TextComponent(ConfigHolder.MESSAGE_PLAYER_DOES_NOT_WANT_MESSAGES_MESSAGE.replaceAll("%target%", sendPlayer.getName())));
             return;
         }
 

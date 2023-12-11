@@ -1,7 +1,7 @@
 package net.lumania.chat.listeners;
 
 import net.lumania.chat.LumaniaChatPlugin;
-import net.lumania.chat.utils.PermissionHolder;
+import net.lumania.chat.utils.ConfigHolder;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -45,8 +45,8 @@ public class PlayerChatListener implements Listener {
 
             String message = this.formatColors(event.getMessage());
 
-            if(this.isUnicode(message) && (!player.hasPermission(PermissionHolder.ALL_BYPASSES_PERMISSION) || !player.hasPermission(PermissionHolder.ALL_FEATURES_PERMISSION) || !player.hasPermission(PermissionHolder.ANTI_UNICODE_BYPASS))) {
-                spyPlayer.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§b" + player.getServer().getInfo().getName() + " §8| §e§l" + player.getName() + "§7 hat eine Unicode Nachricht gesendet§8."));
+            if(this.isUnicode(message) && (!player.hasPermission(ConfigHolder.ALL_BYPASSES_PERMISSION) || !player.hasPermission(ConfigHolder.ALL_FEATURES_PERMISSION) || !player.hasPermission(ConfigHolder.ANTI_UNICODE_BYPASS))) {
+                spyPlayer.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§b" + player.getServer().getInfo().getName() + "§8: §f" + ConfigHolder.UNICODE_WARNING_MESSAGE.replaceAll("%target%", player.getName())));
                 return;
             }
 

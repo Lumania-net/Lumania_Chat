@@ -1,6 +1,7 @@
 package net.lumania.chat.listeners;
 
 import net.lumania.chat.LumaniaChatPlugin;
+import net.lumania.chat.utils.ConfigHolder;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -35,7 +36,7 @@ public class PlayerQuitListener implements Listener {
                     if(spyPlayer == null || !spyPlayer.isConnected())
                         continue;
 
-                    spyPlayer.sendMessage(new TextComponent(LumaniaChatPlugin.PREFIX + "§7Der Spieler den du ausspioniert hast§8, §7ist Offline gegangen§8."));
+                    spyPlayer.sendMessage(new TextComponent(ConfigHolder.SPY_SPYING_PLAYER_WENT_OFFLINE_MESSAGE.replaceAll("%target%", player.getName())));
                 }
             }
         }

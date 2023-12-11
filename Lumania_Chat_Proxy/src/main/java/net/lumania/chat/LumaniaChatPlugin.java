@@ -7,7 +7,7 @@ import net.lumania.chat.database.DatabaseService;
 import net.lumania.chat.listeners.PlayerChatListener;
 import net.lumania.chat.listeners.PlayerJoinListener;
 import net.lumania.chat.listeners.PlayerQuitListener;
-import net.lumania.chat.utils.PermissionHolder;
+import net.lumania.chat.utils.ConfigHolder;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -36,11 +36,11 @@ public class LumaniaChatPlugin extends Plugin {
 
     private LumaniaChatPlugin instance;
     private DatabaseService databaseService;
-    private PermissionHolder permissionHolder;
+    private ConfigHolder configHolder;
 
     @Override
     public void onEnable() {
-        permissionHolder = new PermissionHolder(this);
+        configHolder = new ConfigHolder(this);
 
         ProxyServer.getInstance().getPluginManager().registerListener(this, new PlayerChatListener(this));
         ProxyServer.getInstance().getPluginManager().registerListener(this, new PlayerQuitListener(this));
@@ -62,7 +62,7 @@ public class LumaniaChatPlugin extends Plugin {
         String noPermissionsMessage = this.chatConfiguration.getString("permissions.noPermissionsMessage").replaceAll("&", "§");
         NO_PERMISSIONS = PREFIX + noPermissionsMessage;
 
-        this.permissionHolder.loadConfig(this.chatConfiguration);
+        this.configHolder.loadConfig(this.chatConfiguration);
 
         this.databaseService = new DatabaseService(this);
     }
@@ -111,7 +111,7 @@ public class LumaniaChatPlugin extends Plugin {
         return chatConfiguration;
     }
 
-    public PermissionHolder getPermissionHolder() {
-        return permissionHolder;
+    public ConfigHolder getConfigHolder() {
+        return configHolder;
     }
 }
